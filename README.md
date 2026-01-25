@@ -40,7 +40,7 @@ Plataforma web para monitoramento de sensores ambientais integrados com Fiware. 
 Escolha um dos métodos abaixo para instalar e executar a aplicação:
 
 <details>
-<summary><strong>Instalação Local com Python</strong></summary>
+<summary><strong>Instalação local com Python</strong></summary>
 
 ### Pré-requisitos
 
@@ -92,6 +92,8 @@ Escolha um dos métodos abaixo para instalar e executar a aplicação:
 8. **Acesse a aplicação**
    - Interface principal: [http://localhost:8000/sensores/](http://localhost:8000/sensores/)
    - Painel administrativo: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+
+</details>
 
 <details>
 <summary><strong>Docker via <a href="https://hub.docker.com/r/gabricoto/gs-fiap-monitor">hub.docker.com</a></strong></summary>
