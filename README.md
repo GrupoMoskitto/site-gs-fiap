@@ -3,7 +3,8 @@
   <img src="https://img.shields.io/badge/REST%20API-DRF-blue?logo=django" alt="REST"/>
   <img src="https://img.shields.io/badge/Fiware-IoT-orange?logo=fiware" alt="Fiware"/>
   <img src="https://img.shields.io/badge/Chart.js-Graphs-ff6384?logo=chartdotjs" alt="Chart.js"/>
-  <img src="https://img.shields.io/badge/Leaflet.js-Maps-199900?logo=leaflet" alt="Leaflet.js"/>
+   <img src="https://img.shields.io/badge/Leaflet.js-Maps-199900?logo=leaflet" alt="Leaflet.js"/>
+   <a href="https://hub.docker.com/r/gabricoto/gs-fiap-monitor"><img src="https://img.shields.io/docker/pulls/gabricoto/gs-fiap-monitor?logo=docker&logoColor=white&color=2496ED" alt="Docker Pulls"/></a>
 </p>
 
 <h1 align="center"><img src="gs_fiap_monitor/static/sensores/img/favicon.png" alt="Moskitto Logo" width="40" style="vertical-align: middle; margin-right: 10px;"/>  GS FIAP Monitor</h1>
