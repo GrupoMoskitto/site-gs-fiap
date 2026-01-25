@@ -107,12 +107,12 @@ Escolha um dos métodos abaixo para instalar e executar a aplicação:
 
 1. **Puxe a imagem do DockerHub**
    ```bash
-   docker pull rouri404/gs-fiap-monitor:latest
+   docker pull gabricoto/gs-fiap-monitor:latest
    ```
 
 2. **Execute o container**
    ```bash
-   docker run -p 8000:8000 rouri404/gs-fiap-monitor:latest
+   docker run -p 8000:8000 gabricoto/gs-fiap-monitor:latest
    ```
 
 3. **Acesse a aplicação**
