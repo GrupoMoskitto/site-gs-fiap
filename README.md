@@ -35,35 +35,12 @@ Plataforma web para monitoramento de sensores ambientais integrados com Fiware. 
 
 ---
 
-## Estrutura de Dados
-
-### Modelos Principais
-
-**Dispositivo**: Representa um sensor físico com identificação única no Fiware, localização geográfica e metadata.
-
-**TipoSensor**: Especifica o tipo de medição (temperatura, umidade, nível) com unidade de medida.
-
-**LeituraSensor**: Armazena o histórico de medições com timestamps de leitura e recebimento.
-
----
-
-## Stack Tecnológico
-
-| Componente | Versão | Propósito |
-|---|---|---|
-| Django | 5.2.1 | Framework web backend |
-| Django REST Framework | 3.16.0 | API REST |
-| Chart.js | (CDN) | Visualização de gráficos |
-| Leaflet.js | (CDN) | Mapas interativos |
-| TailwindCSS | - | Estilização e responsividade |
-| Fiware Orion | - | Context Broker IoT |
-| WhiteNoise | - | Servimento de arquivos estáticos |
-| Prophet | 1.1.7 | Previsões (em planejamento) |
-| Scikit-learn | 1.6.1 | Machine Learning (em planejamento) |
-
----
-
 ## Instalação e Configuração
+
+Escolha um dos métodos abaixo para instalar e executar a aplicação:
+
+<details>
+<summary><strong>Instalação Local com Python</strong></summary>
 
 ### Pré-requisitos
 
@@ -71,7 +48,7 @@ Plataforma web para monitoramento de sensores ambientais integrados com Fiware. 
 - pip ou conda
 - Sistema operacional: Linux, macOS ou Windows
 
-### Passos de Instalação
+### Passos
 
 1. **Clone o repositório**
    ```bash
@@ -116,41 +93,83 @@ Plataforma web para monitoramento de sensores ambientais integrados com Fiware. 
    - Interface principal: [http://localhost:8000/sensores/](http://localhost:8000/sensores/)
    - Painel administrativo: [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
----
+<details>
+<summary><strong>Docker via <a href="https://hub.docker.com/r/gabricoto/gs-fiap-monitor">hub.docker.com</a></strong></summary>
 
-## Configuração de Arquivos Estáticos
+### Pré-requisitos
 
-### WhiteNoise - Servimento em Produção
+- Docker instalado
+- Sistema operacional: Linux, macOS ou Windows
 
-Este projeto utiliza **WhiteNoise** para servir arquivos estáticos em ambiente de produção (quando `DEBUG = False`). A configuração está incluída em `gs_fiap_monitor/settings.py`.
+### Passos
 
-O WhiteNoise gerencia arquivos estáticos (CSS, JavaScript, imagens) e não necessita de um servidor web separado para esse fim.
-
-**Configurações:**
-- `MIDDLEWARE`: WhiteNoise está integrado ao middleware do Django
-- `STATICFILES_STORAGE`: Utiliza compressão e cache-busting
-- Dependências: `whitenoise` e `brotlipy` (incluídas em `requirements.txt`)
-
-**Comando essencial:**
-```bash
-python gs_fiap_monitor/manage.py collectstatic
-```
-
-Execute este comando sempre que alterar arquivos estáticos ou ao deployer a aplicação para garantir que todos os arquivos sejam coletados no diretório `STATIC_ROOT`.
-
----
-
-## Limpeza de Dados do Banco (Desenvolvimento)
-
-Para limpar dados durante testes, mantendo a estrutura do banco:
-
-1. Pare o servidor
-2. Execute: 
+1. **Puxe a imagem do DockerHub**
    ```bash
-   python gs_fiap_monitor/manage.py flush
+   docker pull rouri404/gs-fiap-monitor:latest
    ```
-3. Confirme com `yes` quando solicitado
-4. (Opcional) Recrie um usuário administrativo se necessário
+
+2. **Execute o container**
+   ```bash
+   docker run -p 8000:8000 rouri404/gs-fiap-monitor:latest
+   ```
+
+3. **Acesse a aplicação**
+   - Interface principal: [http://localhost:8000/sensores/](http://localhost:8000/sensores/)
+   - Painel administrativo: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+
+> **Dica:** Esta é a forma mais rápida para começar sem fazer build local.
+
+</details>
+
+<details>
+<summary><strong>Docker local</strong></summary>
+
+### Pré-requisitos
+
+- Docker e Docker Compose instalados
+- Sistema operacional: Linux, macOS ou Windows
+
+### Passos
+
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/rouri404/site-gs-fiap.git
+   cd site-gs-fiap
+   ```
+
+2. **Configure variáveis de ambiente (opcional)**
+   
+   Crie um arquivo `.env` na raiz do projeto para configurações personalizadas:
+   ```bash
+   DEBUG=False
+   SECRET_KEY=sua-chave-secreta-aqui
+   ALLOWED_HOSTS=localhost,127.0.0.1,seu-dominio.com
+   ```
+
+3. **Inicie os containers**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Execute as migrações do banco de dados**
+   ```bash
+   python gs_fiap_monitor/manage.py migrate
+   ```
+
+5. **Colete os arquivos estáticos**
+   ```bash
+   docker-compose exec web python gs_fiap_monitor/manage.py collectstatic --noinput
+   ```
+
+6. **Crie um usuário administrativo (opcional)**
+   ```bash
+   docker-compose exec web python gs_fiap_monitor/manage.py createsuperuser
+   ```
+
+7. **Acesse a aplicação**
+   - Interface principal: [http://localhost:8000/sensores/](http://localhost:8000/sensores/)
+   - Painel administrativo: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+</details>
 
 ---
 
@@ -209,17 +228,6 @@ As notificações devem seguir o padrão abaixo:
 - `TimeInstant` ou `timestamp`: Define o horário da leitura
 - `unitCode` nos metadados: Especifica a unidade de medida
 - `id`: Identificador único que deve corresponder ao ID cadastrado no sistema
-
----
-
-## Visualização da Interface
-
-| Página | Descrição |
-|---|---|
-| **Listagem de Dispositivos** | Visualização em cards com status operacional, últimas leituras e ações rápidas |
-| **Detalhes do Dispositivo** | Informações completas, dados em tempo real e gráficos históricos |
-| **Mapa Interativo** | Localização dos dispositivos no mapa com indicadores de status |
-| **Painel Administrativo** | Gerenciamento completo de dispositivos, sensores e histórico de leituras |
 
 ---
 
@@ -303,3 +311,75 @@ python gs_fiap_monitor/manage.py shell -c "from sensores.models import Dispositi
 ```
 
 **Resultado esperado:** Cada comando criará 5 leituras com timestamps retroativos (últimas 5 horas), permitindo visualizar gráficos e analisar comportamentos em períodos diferentes.
+
+---
+
+## Informações Técnicas
+
+<details>
+<summary><strong>Estrutura de Dados</strong></summary>
+
+### Modelos Principais
+
+**Dispositivo**: Representa um sensor físico com identificação única no Fiware, localização geográfica e metadata.
+
+**TipoSensor**: Especifica o tipo de medição (temperatura, umidade, nível) com unidade de medida.
+
+**LeituraSensor**: Armazena o histórico de medições com timestamps de leitura e recebimento.
+
+</details>
+
+<details>
+<summary><strong>Stack Tecnológico</strong></summary>
+
+| Componente | Versão | Propósito |
+|---|---|---|
+| Django | 5.2.1 | Framework web backend |
+| Django REST Framework | 3.16.0 | API REST |
+| Chart.js | (CDN) | Visualização de gráficos |
+| Leaflet.js | (CDN) | Mapas interativos |
+| TailwindCSS | - | Estilização e responsividade |
+| Fiware Orion | - | Context Broker IoT |
+| WhiteNoise | - | Servimento de arquivos estáticos |
+| Prophet | 1.1.7 | Previsões (em planejamento) |
+| Scikit-learn | 1.6.1 | Machine Learning (em planejamento) |
+
+</details>
+
+<details>
+<summary><strong>Configuração de Arquivos Estáticos</strong></summary>
+
+### WhiteNoise - Servimento em Produção
+
+Este projeto utiliza **WhiteNoise** para servir arquivos estáticos em ambiente de produção (quando `DEBUG = False`). A configuração está incluída em `gs_fiap_monitor/settings.py`.
+
+O WhiteNoise gerencia arquivos estáticos (CSS, JavaScript, imagens) e não necessita de um servidor web separado para esse fim.
+
+**Configurações:**
+- `MIDDLEWARE`: WhiteNoise está integrado ao middleware do Django
+- `STATICFILES_STORAGE`: Utiliza compressão e cache-busting
+- Dependências: `whitenoise` e `brotlipy` (incluídas em `requirements.txt`)
+
+**Comando essencial:**
+```bash
+python gs_fiap_monitor/manage.py collectstatic
+```
+
+Execute este comando sempre que alterar arquivos estáticos ou ao deployer a aplicação para garantir que todos os arquivos sejam coletados no diretório `STATIC_ROOT`.
+
+</details>
+
+<details>
+<summary><strong>Limpeza de Dados do Banco (Desenvolvimento)</strong></summary>
+
+Para limpar dados durante testes, mantendo a estrutura do banco:
+
+1. Pare o servidor
+2. Execute: 
+   ```bash
+   python gs_fiap_monitor/manage.py flush
+   ```
+3. Confirme com `yes` quando solicitado
+4. (Opcional) Recrie um usuário administrativo se necessário
+
+</details>
